@@ -1,7 +1,7 @@
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine, StaticPool
 from sqlalchemy.orm import sessionmaker
-from apitesting.main import app, Base, get_db
+from apitesting.main import DBItem, app, Base, get_db
 
 # Setup the TestClient
 client = TestClient(app)
@@ -26,6 +26,12 @@ def override_get_db():
 
 
 app.dependency_overrides[get_db] = override_get_db
+
+
+def test_read_root():
+    response = client.get("/")
+    assert response.status_code == 200
+    assert response.json() == "Server is running"
 
 
 def test_create_item():
@@ -57,7 +63,8 @@ def test_read_item():
 
 
 def test_update_item():
-    item_id = 1
+    item_id = 100
+
     response = client.put(
         f"/items/{item_id}",
         json={"name": "Updated Item", "description": "This is an updated item"},
@@ -70,7 +77,7 @@ def test_update_item():
 
 
 def test_delete_item():
-    item_id = 1
+    item_id = 100
     response = client.delete(f"/items/{item_id}")
     assert response.status_code == 200, response.text
     data = response.json()
@@ -83,6 +90,13 @@ def test_delete_item():
 def setup() -> None:
     # Create the tables in the test database
     Base.metadata.create_all(bind=engine)
+
+    # create test items
+    session = TestingSessionLocal()
+    db_item = DBItem(id=100, name="Test Item", description="This is a test item")
+    session.add(db_item)
+    session.commit()
+    session.close()
 
 
 def teardown() -> None:

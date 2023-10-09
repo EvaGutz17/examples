@@ -47,6 +47,11 @@ async def startup():
     Base.metadata.create_all(bind=engine)
 
 
+@app.get("/")
+def read_root():
+    return "Server is running"
+
+
 @app.post("/items")
 def create_item(item: ItemCreate) -> Item:
     db = SessionLocal()
