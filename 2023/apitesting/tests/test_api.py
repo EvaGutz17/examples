@@ -1,7 +1,7 @@
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine, StaticPool
 from sqlalchemy.orm import sessionmaker
-from main import app, Base, get_db
+from apitesting.main import app, Base, get_db
 
 # Setup the TestClient
 client = TestClient(app)
