@@ -7,7 +7,7 @@ from explainer import retrieve_code_explanation, retrieve_code_language
 
 def display_header() -> None:
     st.image("img/logo.jpg")
-    st.title("Welcome to AI-rjan Code Explainer")
+    st.title("Welcome to Short Historical Lessons for Modern Business Leaders")
     st.text("Just upload your code or copy and paste in the field below")
     st.warning("Warning: uploaded files have precendence on copied and pasted code.")
 
